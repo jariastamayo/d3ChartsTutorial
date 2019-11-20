@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as d3 from 'd3';
+import { HttpClient } from '@angular/common/http';
 
 export interface Item {
   name: string;
@@ -12,6 +12,16 @@ export interface SalePair {
   SalePrice: number
 }
 
+export interface RpmData {
+  scatterPlotID: number,
+  xValue: number,
+  yValue: number,
+  isSelfDot: boolean,
+  isPeerDot: boolean,
+  fiscalYear: number,
+  legend: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,8 +32,9 @@ export class DataService {
   private readonly MIN_ITEM = 10;
   private readonly MAX_ITEM = 20;
   private readonly MAX_VALUE = 100;
+  private testDataUrl = 'assets/test-data.json';
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   private generateRandomValue(start: number, end: number) {
     return Math.ceil(Math.random() * (end - start) + start);
@@ -41,5 +52,9 @@ export class DataService {
       });
     }
     return samples;
+  }
+
+  getRpmTestData() {
+    return this.http.get<RpmData[]>(this.testDataUrl);
   }
 }
