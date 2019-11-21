@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService, RpmData } from '../data.service';
 import * as d3 from 'd3';
+import { style } from 'd3';
 
 
 @Component({
@@ -39,14 +40,15 @@ export class ScatterRpmComponent implements OnInit {
         this.addDots();
       });
     this.tooltip = d3.select('#rpm')
-      .append("div")
-      .style("opacity", 0)
-      .attr("class", "tooltip")
-      .style("background-color", "white")
-      .style("border", "solid")
-      .style("border-width", "1px")
-      .style("border-radius", "5px")
-      .style("padding", "10px");
+      .append('div')
+      .style('opacity', 0)
+      .attr('class', 'tooltip')
+      .style('background-color', 'white')
+      .style('border', 'solid')
+      .style('border-width', '1px')
+      .style('border-radius', '5px')
+      .style('padding', '10px')
+      .style('position', 'absolute');
   }
 
   addXAxis() {
@@ -61,7 +63,7 @@ export class ScatterRpmComponent implements OnInit {
   addYaxis() {
     this.y = d3.scaleLinear()
       .domain([0, 5])
-      .range([this.height, 0])
+      .range([this.height, 0]);
     this.svg.append('g')
       .call(d3.axisLeft(this.y));
   }
@@ -74,15 +76,15 @@ export class ScatterRpmComponent implements OnInit {
   mouseMove(d: RpmData) {
     this.tooltip
       .html('Testing values: ' + d.xValue + ' ' + d.yValue)
-      .style("left", (d3.event.x) + 'px')
-      .style("top", (d3.event.y + 15) + 'px')
+      .style('left', (d3.event.x) + 'px')
+      .style('top', (d3.event.y + 15) + 'px');
   }
 
   mouseLeave() {
     this.tooltip
       .transition()
       .duration(200)
-      .style("opacity", 0)
+      .style('opacity', 0);
   }
 
   addDots() {
@@ -91,13 +93,13 @@ export class ScatterRpmComponent implements OnInit {
       .data(this.testData)
       .enter()
       .append('circle')
-      .attr('cx', (d: RpmData) => { return this.x(d.xValue); })
-      .attr('cy', (d: RpmData) => { return this.y(d.yValue); })
-      .attr('r', (d: RpmData) => { return d.isSelfDot ? 6 : 3 })
-      .style('fill', (d: RpmData) => { return d.isSelfDot ? 'green' : 'gray' })
-      .on('mouseover', () => {this.mouseOver()})
-      .on('mousemove', (d: RpmData) => {this.mouseMove(d)})
-      .on('mouseleave', () => {this.mouseLeave()});
+      .attr('cx', (d: RpmData) => this.x(d.xValue))
+      .attr('cy', (d: RpmData) => this.y(d.yValue))
+      .attr('r', (d: RpmData) => d.isSelfDot ? 6 : 3)
+      .style('fill', (d: RpmData) => d.isSelfDot ? 'green' : 'gray')
+      .on('mouseover', () => {this.mouseOver(); })
+      .on('mousemove', (d: RpmData) => {this.mouseMove(d); })
+      .on('mouseleave', () => {this.mouseLeave(); });
   }
 
 }
